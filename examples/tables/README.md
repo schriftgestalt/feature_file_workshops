@@ -58,9 +58,9 @@ table hhea {
 ## Validation
 
 ```bash
-# Validate a table example
+# Validate a table example (from the `tables` directory)
 ../../validate-examples.py head_FontRevision.fea
 
-# Validate all table examples
-../../validate-examples.py tables/*.fea
+# Validate all table examples (from the `examples` directory)
+../validate-examples.py tables/*.fea
 ```

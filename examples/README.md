@@ -21,7 +21,7 @@ finding files that cover particular semantics.
 
 ## Adding Examples
 
-See the (style guide)[../STYLE_GUIDE.md] for guidance on adding examples.
+See the [style guide](../STYLE_GUIDE.md) for guidance on adding examples.
 
 When submitting PRs that modify the grammar, please place examples of new
 functionality into a new, appropriately named directory.  Example files should
@@ -34,7 +34,7 @@ changes.
 ## Validation
 
 All examples are validated automatically in CI, but can be validated locally 
-with the following commands.
+with the following commands:
 
 ```bash
 # Validate a single file

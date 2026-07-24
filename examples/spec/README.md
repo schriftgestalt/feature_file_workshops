@@ -131,11 +131,11 @@ Files are named `{section}-{test_number}.fea` where:
 All files in this directory must parse successfully with the grammar:
 
 ```bash
-# Validate a single file
+# Validate a single file (from the `spec` directory)
 ../../validate-examples.py 4bi-2.fea
 
-# Validate all spec examples
-../../validate-examples.py spec/*.fea
+# Validate all spec examples (from the `examples` directory)
+../validate-examples.py spec/*.fea
 ```
 
 ## Notes

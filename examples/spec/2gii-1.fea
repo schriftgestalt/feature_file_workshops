@@ -1,4 +1,4 @@
-# Test redefining name glyph class.
+# Test redefining named glyph class.
 @Vowels.lc = [a e i];
 @Vowels.lc = [a e i o u];
 @Vowels.uc = [A E I O U];

@@ -12,7 +12,7 @@ This directory contains examples of advanced OpenType feature file constructs th
 - `ParamUILabelNameID` - Parameter UI labels (localized, can be repeated)
 - `Character` - Unicode values for base glyphs (decimal or hex)
 
-Character variant features (cv01-cv99) allow font designers to provide UI strings for alternate glyph variants.
+Character variant features (cv01-cv99) allow font designers to provide UI strings for alternate glyph variants:
 
 ```fea
 feature cv01 {
@@ -28,7 +28,7 @@ feature cv01 {
 ```
 
 ### Feature Names
-**`featureNames.fea`** - Multi-language feature names
+**`featureNames.fea`** - Multi-language feature names<br>
 **`featureNames_alternate.fea`** - Alternative featureNames usage
 
 The `featureNames` block provides localized names for stylistic set features (ss01-ss20):

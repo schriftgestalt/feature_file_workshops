@@ -1,4 +1,4 @@
-# hack to force makeotfexe to generate vhea table
+# Hack to force makeotfexe to generate vhea table
 feature vrt2 { sub a by a; } vrt2;
 
 table vhea {

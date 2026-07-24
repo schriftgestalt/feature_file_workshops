@@ -38,7 +38,7 @@ pos ligature f_f_i <anchor 100 450> mark @TOP_MARKS
 ```
 
 ### Enumerate Positioning
-**`enumerate_positioning.fea`** - Enumerate positioning syntax
+**`enumerate_positioning.fea`** - Enumerate positioning syntax<br>
 **`enumerate_positioning_alt.fea`** - Alternative enumerate usage
 
 The `enum pos` keyword creates individual pair positioning rules for all combinations:

@@ -340,8 +340,8 @@ wght=1000d, opsz=0n
 
 There are three unit letters, each of which indicates how the number after the
 equal sign is interpreted. `u` indicates the number is expressed in "user"
-units—the "input" values in a variable font's designspace axis map. `d`
-indicates the number is exprssed in "design" units—the "output" values in a
+units – the "input" values in a variable font's designspace axis map. `d`
+indicates the number is expressed in "design" units – the "output" values in a
 variable font's designspace axis map. (The design units of an _axis_, which are
 typically specified using a mapping in the axis element of a designspace file,
 are not to be confused with the design units of a _font_, which specify x or y
@@ -356,7 +356,7 @@ wght=1000d, opsz=20u+
 wght=1000d-, opsz=20u
 ```
 
-A trailing plus sign indicates that the normalied axis value will be calculated
+A trailing plus sign indicates that the normalized axis value will be calculated
 based according to the number and unit. Then, the minimum F2Dot14 increment
 will be added to it, resulting in an axis location value that is the minimal
 amount greater than the location value without the plus. A trailing hyphen
@@ -376,7 +376,7 @@ value where the name is used.  The format is:
 locationDef <location> @name;
 ```
 
-The name must always be preceded by `@` (at-sign), in both its defintion and
+The name must always be preceded by `@` (at-sign), in both its definition and
 references. The character after the `@` must be alphabetic or an underscore,
 the other characters can be any of those plus digits or a period, but
 _cannot_ include a hyphen.  For example:
@@ -458,7 +458,7 @@ the vertical metric features.
 ```
 
 A `<vmetric>`, or record format B, is similar to A in how it is used, but
-specifes a single variable value. A `<location>` can either be a location
+specifies a single variable value. A `<location>` can either be a location
 specifier [§[2.e.iia](#2.e.iia)] or a location name [§[2.e.iib](#2.e.iib)]. A
 `<metric>` not preceded by a `<location>` and colon is treated as the value for
 the default instance of the font. There must be at most one of these "bare"
@@ -684,7 +684,7 @@ Second, the pair can be specified analogously to value record format D:
 ```
 
 Note the distinctive aspects of this format: There is only one set of parentheses,
-and each of the values in the pair are enclosed by angle brackets.
+and each of the values in the pair is enclosed by angle brackets.
 
 <a name="2.e.viii"></a>
 #### 2.e.viii. Named anchor definition
@@ -830,7 +830,7 @@ in an alternate substitution lookup type rule.
 #### 2.g.i. Ranges
 
 A glyph range is a notational mechanism in the feature file grammar that makes it
-possible to define a class of several glyphs is a concise way. The mechanism makes
+possible to define a class of several glyphs in a concise way. The mechanism makes
 use of glyph names that use a contiguous alphabetic sequence A to Z or a to z (or
 sub-sequences thereof), or that use contiguous numeric sequences, such as 0 to 9. A
 range is specified by referencing starting and ending glyph names, and all of the
@@ -860,7 +860,7 @@ For non-CID fonts, the ordering is independent of the ordering of glyphs in the
 font. `<firstGlyph>` and `<lastGlyph>` must be the same length and can differ only
 in one of the following ways:
 
-1.  By a single letter from A-Z, either uppercase or lowercase. For example:
+1.  By a single letter from A to Z, either uppercase or lowercase. For example:
 
     ```fea
     [A.swash - Z.swash]
@@ -883,7 +883,7 @@ in one of the following ways:
     [ampersand.1 - ampersand.58]  # invalid
     ```
 
-    is not a valid glyph class since the length of the glyph names differ.
+    is not a valid glyph class since the lengths of the glyph names differ.
 
 Note that
 
@@ -974,7 +974,7 @@ A "bare" tag must start with a character from the following set:
     abcdefghijklmnopqrstuvwxyz
     _  # underscore
 
-and the remaining characters can be any of:
+The remaining characters can be any of:
 
     0123456789
     .  # Period
@@ -1000,8 +1000,8 @@ provision for including double-quote characters in a quoted tag.)
 ### 2.i. Lookup block labels
 
 The same length and name restrictions that apply to a production glyph name
-apply to a lookup block label.  For historical reasons the keyword `mark' also
-accepted as a label but other keywords are not.
+apply to a lookup block label. For historical reasons, the keyword `mark` is
+also accepted as a label, but other keywords are not.
 
 <a name="3"></a>
 ## 3. Including files
@@ -1095,8 +1095,8 @@ same set of language systems, and a particular feature’s lookups will be
 identical across the language systems under which the feature is registered.
 
 The `languagesystem` statement provides a simple directive to use in this case.
-It is the simplest way to specify language system in the feature file. (For the
-`aalt` and `size` features, it is the only way to specify language system.) One
+It is the simplest way to specify language systems in the feature file. (For the
+`aalt` and `size` features, it is the only way to specify language systems.) One
 or more such statements may be present in the feature file at global scope (i.e.
 outside of the feature blocks or any other blocks) and before any of the feature
 blocks:
@@ -1148,7 +1148,7 @@ language systems of the feature, or whose language systems vary from the set
 of language systems of the rest of the features in the file, as specified by
 the `languagesystem` statements. In these cases, `script` and `language`
 statements will need to be used within the feature block itself.
-Such statements affect only that feature. **Note**: you may not use the `script`
+Such statements affect only that feature. **Note:** you may not use the `script`
 or `language` keywords within a standalone lookup block.
 
 Rules that are specified after the start of a feature and before the first
@@ -1166,7 +1166,7 @@ specification.
 
 The one exception to this rule are the default lookups. There are two levels of
 default lookups. Rules specified between the start of a feature definition and
-the first `script` are added to all language-systems, unless a language
+the first `script` are added to all language systems, unless a language
 statement specifies the `exclude_dflt` keyword. Rules specified between the
 occurrence of the `script` statement and the first language statement other than
 `dflt` are added to explicitly specified languages for the current script, but
@@ -1205,7 +1205,7 @@ language <language tag> [exclude_dflt|include_dflt] [required];
 ```
 
 To exclude a set of rules from only one or a few languages, you must define the
-set of rules as a lookup, and explicitly include the lookup in under the
+set of rules as a lookup, and explicitly include the lookup under the
 languages that should include it, and omit it from the rules included under the
 languages where it should be excluded.
 
@@ -1237,7 +1237,7 @@ language DEU include_dflt;
 # Same as:    language DEU;
 ```
 
-The keyword `required`, when present, specifies the current feature as the
+The keyword `required`, when present, specifies the current feature as a
 required feature for the specified language system.
 
 _[ The keyword `required` is currently not implemented. ]_
@@ -1379,19 +1379,16 @@ lookup <label> [useExtension] {
 A named lookup block may be defined either inside or outside of a feature block.
 In either case, it may be referenced in different feature blocks. If it is
 defined outside a feature block, is is referred to as a ‘standalone’ lookup.
-
-The lookup will be created with a GSUB or GPOS Extension lookup type if and only
-if the optional `useExtension` keyword is used.
-
-A lookup block may be defined either inside or outside of feature blocks.
-**Note**: you may not use the `script` or `language` keywords within a standalone
+**Note:** you may not use the `script` or `language` keywords within a standalone
 lookup block.
 
-The `useExtension` keyword has two effects: all the records of all types that
-are referenced by a lookup qualifier are placed in one contiguous block of data,
-and the offset to the lookup may be 32 bits rather than limited to 16 bits.
+The lookup will be created with a GSUB or GPOS Extension lookup type if and only
+if the optional `useExtension` keyword is used. The `useExtension` keyword has 
+two effects: all the records of all types that are referenced by a lookup 
+qualifier are placed in one contiguous block of data, and the offset to the 
+lookup may be 32 bits rather than limited to 16 bits.
 
-When your font cannot be built because of an offset overflow error (meaning that
+If your font cannot be built because of an offset overflow error (meaning that
 the offset from one record to another record exceeds the 64 Kbyte limit imposed
 by the maximum size possible for a 16-bit offset field), then add this qualifier
 to the largest lookup. Keep adding it to more lookups until your font will
@@ -1449,7 +1446,7 @@ The `markClass` keyword is used to identify a mark glyph class definition
 statement.
 
 A mark glyph class name is defined differently than a regular glyph class. The
-mark class definition is built up by a one or more of statements in the form:
+mark class definition is built up by one or more statements of the form:
 
 ```fea
 markClass <glyph|glyphclass> <anchor> <mark glyph class name>;
@@ -1581,12 +1578,12 @@ feature liga {
             sub c h by c_h;
             sub c k by c_k;
         # The rules above will be placed in a lookup that is registered only
-        # under the script 'latn', 'language DEU'.
+        # under the script 'latn', language 'DEU'.
 
         language TRK;
         # This will inherit both the top level default rules - the rules defined
         # before the first 'script' statement, and the script-level default
-        # rules for 'latn: all the lookups of this feature defined after the
+        # rules for 'latn': all the lookups of this feature defined after the
         # 'script latn' statement, and before the 'language DEU' statement.
         # If 'TRK' were not named here, it would not inherit the default rules
         # for the script 'latn'.
@@ -1596,7 +1593,7 @@ feature kern {
     pos a y -150;
     # [more pos statements]
     # All the rules in this feature will be grouped in a single lookup
-    # that is registered under all the languagesystems.
+    # that is registered under all the language systems.
 } kern;
 ```
 
@@ -1648,11 +1645,11 @@ feature liga {
         sub c k by c_k;
 
         language TRK exclude_dflt;   # default lookups are excluded.
-            lookup NO_I;             # Only this lookup is included under the TRK language
+            lookup NO_I;             # Only this lookup is included under the 'TRK' language
 
     script cyrl;
         language SRB;
-            sub c t by c_t; # this rule will apply only under script cyrl language SRB.
+            sub c t by c_t; # this rule will apply only under script 'cyrl', language 'SRB'.
 } liga;
 ```
 
@@ -1845,7 +1842,7 @@ A Chain Substitution rule target sequence has three parts: backtrack, input,
 and lookahead glyph sequences. A glyph sequence comprises one or more glyphs
 or glyph classes.
 
-The most important is input glyph sequence. This is the sequence of glyphs and
+The most important is the input glyph sequence. This is the sequence of glyphs and
 glyph classes to which substitution operations are applied. Optionally, a prefix
 (also known as backtrack) glyph sequence may be specified, as well as a suffix
 (also known as lookahead) glyph sequence. The entire sequence of glyphs — prefix
@@ -1855,7 +1852,7 @@ first glyph of the input sequence with the current glyph of the text being
 processed. If the rule is matched, then the current context moves the current
 glyph pointer ahead in the original text by the length of the input sequence.
 Note that in the FEA syntax, the entire context string (backtrack sequence +
-input sequence + look-ahead sequence) are all written in the text string order.
+input sequence + look-ahead sequence) is written in the text string order.
 This is worth emphasis, as inside the lookup rule, the glyphs of the backtrack
 sequence are written in reverse order from the text to be matched. Developers of
 font editing tools who know this are sometimes confused by the FEA syntax.
@@ -1910,7 +1907,7 @@ when the sequence “c t s” is preceded by any one of the glyphs “a e i o u�
 This form of the contextual substitution rule is the most flexible. You can
 specify a substitution lookup for more than one input sequence glyph or glyph
 class, the referenced lookups can be of different types, and the referenced
-lookups can have different lookup flags that the parent contextual lookup. The
+lookups can have different lookup flags than the parent contextual lookup. The
 drawback is that it is difficult to understand what substitution rule will be
 applied, and the implementation may not warn if the referenced lookup does not
 contain a rule that matches the context.
@@ -2155,7 +2152,7 @@ position one <-80 0 -160 0>;
 #### 6.b.i. Specific and class pair kerning
 
 Rules for this LookupType are usually used for kerning, and may be in either of
-2 formats:
+two formats:
 
 ##### Pair Pos format A:
 
@@ -2385,9 +2382,9 @@ may include a glyph which is in another mark class that is used within the same
 lookup.
 
 For example, to specify that the anchor of mark glyphs acute and grave is at
-x=30, y=600, and that the anchor of mark glyphs dieresis and umlaut is at x=60,
-y=600, and to position the anchor point of the four mark glyphs at anchor point
-x=250, y=450 of glyphs a, e, o and u:
+x=150, y=-10, and that the anchor of mark glyphs dieresis and umlaut is at
+x=300, y=-10, and to position the anchor point of the four mark glyphs at anchor
+point x=250, y=450 of glyphs a, e, o and u:
 
 ```fea
 markClass [acute grave] <anchor 150 -10> @TOP_MARKS;
@@ -2500,7 +2497,7 @@ A Chain Positioning rule target sequence has three parts: backtrack, input, and
 lookahead glyph sequences. A glyph sequence comprises one or more glyphs or
 glyph classes.
 
-The most important is input glyph sequence. This is the sequence of glyphs and
+The most important is the input glyph sequence. This is the sequence of glyphs and
 glyph classes to which positioning operations are applied. Optionally, a prefix
 (also known as backtrack) glyph sequence may be specified, as well as a suffix
 (also known as lookahead) glyph sequence. The entire sequence of glyphs — prefix
@@ -2510,7 +2507,7 @@ first glyph of the input sequence with the current glyph of the text being
 processed. If the rule is matched, then the current context moves the current
 glyph pointer ahead in the original text by the length of the input sequence.
 Note that in the FEA syntax, the entire context string (backtrack sequence +
-input sequence + look-ahead sequence) are all written in the text string order.
+input sequence + look-ahead sequence) is written in the text string order.
 This is worth emphasis, as inside the lookup rule, the glyphs of the backtrack
 sequence are written in reverse order from the text to be matched. Developers of
 font editing tools who know this are sometimes confused by the FEA syntax.
@@ -2558,7 +2555,7 @@ feature test {
 
 This rule has only an input sequence, and no backtrack or lookahead sequence. It
 will match when the current glyph is 'T', followed by either 'o' or 'c',
-followed by any mark glyph. The lookup CNTXT_PAIR_POS will applied to the 'T',
+followed by any mark glyph. The lookup CNTXT_PAIR_POS will be applied to the 'T',
 and the lookup CNTXT_MARK_TO_BASE will be applied to the glyphs in the class
 @ALL_MARKS.
 
@@ -2571,7 +2568,7 @@ applied, and the implementation may not warn if the referenced lookup does not
 contain a rule that matches the context.
 
 When it is acceptable to specify a positioning rule for only one input glyph or
-glyph class in the input sequence, and that the referenced lookup have the same
+glyph class in the input sequence, and that the referenced lookups have the same
 lookup flag as the parent contextual lookup, then you can specify a contextual
 rule with the positioning rule in-line. This is much easier to understand.
 
@@ -2689,7 +2686,7 @@ position L' quoteright' -150;
 
 This statement does two things that are not desirable in pair kerning statement.
 First, it decreases the advance width of quoteright, not L. Second, it will move
-the current glyph pointer forward by 2 glyphs, skipping over the quoteright so
+the current glyph pointer forward by two glyphs, skipping over the quoteright so
 that quoteright will not be examined for matching kern rules.
 
 The FEA syntax will not allow applying positioning lookups of different types in
@@ -2719,17 +2716,17 @@ followed by sukun and then by alef.
 ###### Example 6:
 
 ```fea
-lookup a_reduce_sb {
+lookup A_REDUCE_SB {
     pos a <-80 0 -160 0>;
-} a_reduce_sb;
+} A_REDUCE_SB;
 
-lookup a_raise {
+lookup A_RAISE {
     pos a <0 100 0 0>;
-} a_raise;
+} A_RAISE;
 
 feature kern {
-    pos a' lookup a_reduce_sb lookup a_raise b;
-} test;
+    pos a' lookup A_REDUCE_SB lookup A_RAISE b;
+} kern;
 ```
 
 In this example the rule in the kern feature will match the sequence “a b” and apply
@@ -2797,7 +2794,7 @@ marked. There is special treatment of the mark classes. The implementation
 creates a glyph class which is the input glyph class to which the positioning
 lookup is applied. Each mark class that is marked as part of the input sequence
 is added to this glyph class. If the rule has four mark classes, and three are
-marked as part of the input sequence. the result is a single glyph class in the
+marked as part of the input sequence, the result is a single glyph class in the
 input sequence which contains the glyphs from the three marked mark classes. The
 base glyph or glyph class is also always added in the contextual sequence.
 
@@ -2846,31 +2843,31 @@ over the glyph run (see step 4 below). Thus, each lookup has as input the
 accumulated result of all previous lookups in the LookupList (whether in the
 same feature or in other features).
 
-1\.  All glyphs in the client’s glyph run must belong to the same language system.
+1.  All glyphs in the client’s glyph run must belong to the same language system.
     (Glyph sequence matching may not occur across language systems.)
 
 ----
 Do the following first for the GSUB and then for the GPOS:
 
-2\.  Assemble all features (including any required feature) for the glyph run’s
-language system.
+2.  Assemble all features (including any required feature) for the glyph run’s
+    language system.
 
-3\.  Assemble all lookups in these features, in LookupList order, removing any
+3.  Assemble all lookups in these features, in LookupList order, removing any
     duplicates. (All features and thus all lookups needn't be applied to every glyph
     in the run.)
 
-4\.  For each lookup:
+4.  For each lookup:
 
-5\.  For each glyph in the glyph run:
+5.  For each glyph in the glyph run:
 
-6\.  If the lookup is applied to that glyph and the lookupflag doesn't indicate
+6.  If the lookup is applied to that glyph and the lookupflag doesn't indicate
     that that glyph is to be ignored:
 
-7\.  For each subtable in the lookup:
+7.  For each subtable in the lookup:
 
-8\.  If the subtable’s target context is matched:
+8.  If the subtable’s target context is matched:
 
-9\.  Do the glyph substitution or positioning,
+9.  Do the glyph substitution or positioning,
 
 ----
 OR:
@@ -2878,19 +2875,19 @@ OR:
 If this is a (chain) contextual lookup do the following [(10)-(11)] in the
 subtable’s Subst/PosLookupRecord order:
 
-10\. For each (sequenceIndex, lookupListIndex) pair:
+10. For each (sequenceIndex, lookupListIndex) pair:
 
-11\. Apply lookup[lookupListIndex] at input sequence[sequenceIndex]
+11. Apply lookup[lookupListIndex] at input sequence[sequenceIndex]
     [steps(7)-(11)]
 
-12\. Goto the glyph after the input sequence matched in (8)
+12. Go to the glyph after the input sequence matched in (8)
     (i.e. skip any remaining subtables in the lookup).
 
 The “target context” in step 8 above comprises the input sequence and any
 backtrack and lookahead sequences.
 
 The input sequence must be matched entirely within the lookup’s “application
-range” at that glyph (that contiguous subrun of glyphs including and around the
+range” at that glyph (that contiguous sub-run of glyphs including and around the
 current glyph on which the lookup is applied). There is no such restriction on
 the backtrack and lookahead sequences.
 
@@ -2965,7 +2962,7 @@ definition as follows:
     beginning of the GSUB LookupList).
 
 2.  Add any additional single and alternate substitutions in the `aalt`
-    specification to the groups that were created algorithmically, by step 1. This
+    specification to the groups that were created algorithmically by step 1. This
     facility is provided to fine-tune the semantic groups, for instance, if certain
     glyphs weren't referenced in any of the features indicated in step 1 above. This
     can also be used to override substitutions specified by including other
@@ -2990,7 +2987,7 @@ if and only if the `useExtension` keyword is used. Note that since the Extension
 lookup types were added in OpenType specification v1.3, they will not be
 recognized by all OpenType layout parsers.
 
-###### Specifying language system:
+###### Specifying language systems:
 
 This feature will be registered under all language systems specified by
 `languagesystem` statements; see §[4.b.i](#4.b.i) above.
@@ -3417,7 +3414,7 @@ may be from either regular classes definitions or mark class definitions.
 
 If any mark class has been defined, or if any of the lookup flags for skipping
 glyphs of a certain class have been seen, the implementation will check if the
-GDEF keywords for defining the `GlyphClassDef` has been seen. If not, the
+GDEF keywords for defining the `GlyphClassDef` have been seen. If not, the
 implementation will fill them from the substitution and positioning rules, and
 will create a GDEF table even if there is no GDEF definition in the feature
 file. The LIGATURE and COMPONENT classes will be filled from the glyphs used in
@@ -3563,7 +3560,7 @@ language id      0 (English)
 ```
 
 Putting this all together gives the following valid nameID formats and the IDs
-that are assigned.
+that are assigned:
 
     representation              id  platform id platspec id language id
     --------------------------- --- ----------- ----------- -----------
@@ -3750,8 +3747,8 @@ table vmtx {
 
 This would result in the glyph’s vertical origin y coordinate and the glyph’s
 vertical advance width being set as shown. The value set here for the vertical
-origin y coordinate will also set the **topSideBearing** value in the `vmtx` table
-and the vertical origin y value in the `VORG` table for the named glyph.
+origin y coordinate will also determine the **topSideBearing** value in the `vmtx`
+table and the vertical origin y value in the `VORG` table for the named glyph.
 
 For example:
 
@@ -3781,7 +3778,7 @@ table STAT {
 ```
 
 #### Elided fallback name
-Elided fallback name must be defined and at most once. It can be
+The elided fallback name must be defined exactly once. It can be
 defined using full name entries or an existing name ID.
 
 ```fea
@@ -4244,7 +4241,7 @@ along with the tag `sbit`.
 *   Clarified `ignore sub` syntax.
 *   Clarified keyword scoping rules.
 *   Clarified that a glyph can have only either one position or index caret rule,
-    as well as one device caret position rule. in the GDEF table, and fixed example.
+    as well as one device caret position rule, in the GDEF table, and fixed example.
 
 **v1.18 [16 Mar 2016]:**
 
@@ -4293,7 +4290,7 @@ along with the tag `sbit`.
 
 **v1.10 [31 March 2010]:**
 
-*   Fixed typo in example in section [4.d](#4.d): lookFlag values are separated by
+*   Fixed typo in example in section [4.d](#4.d): lookupflag values are separated by
     spaces, not commas.
 *   Fixed typo in example in section [8.c](#8.c) on stylistic names; examples:
     quotes around name string need to be matching double quotes.
@@ -4370,9 +4367,9 @@ along with the tag `sbit`.
     encouraging users to update the syntax.
 
     (This change was made since the `except` syntax was misleading in that it
-    (implied that the exception sequences were exceptions only to the rule at that
-    (same statement, whereas in fact they are exceptions to all subsequent rules
-    (until the end of the lookup.)
+    implied that the exception sequences were exceptions only to the rule at that
+    same statement, whereas in fact they are exceptions to all subsequent rules
+    until the end of the lookup.)
 
 *   Value record, anchor, device, contour point, and caret values: changed to a
     consistent syntax that removes ambiguities and is more human-readable. (They
