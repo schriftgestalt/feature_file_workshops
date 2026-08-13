@@ -22,6 +22,7 @@ LANGSYS                 : 'languagesystem' ;
 SUBTABLE                : 'subtable';
 LOOKUP                  : 'lookup' ;
 LOOKUPFLAG              : 'lookupflag' ;
+STANDALONE              : 'standalone' ;
 NOTDEF                  : '.notdef' ;
 
 RIGHT_TO_LEFT           : 'RightToLeft' ;
@@ -48,6 +49,8 @@ EXCEPT                  : 'except' ;
 IGNORE                  : 'ignore' ;
 SUBSTITUTE              : 'substitute' ;
 SUBSTITUTE_v            : 'sub' ;
+DELETE                  : 'delete' ;
+DELETE_v                : 'del' ;
 REVERSE                 : 'reversesub' ;
 REVERSE_v               : 'rsub' ;
 BY                      : 'by' ;

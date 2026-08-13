@@ -1,0 +1,11 @@
+# A delete statement removes a glyph or every glyph in a class.
+
+@Deprecated = [tonos oxia];
+
+feature ccmp {
+    delete tonos;
+    del @Deprecated;
+
+    # A marked glyph can be deleted only in the specified context.
+    delete tonos' Alpha;
+} ccmp;

@@ -1,0 +1,14 @@
+# The rules following one language statement apply to every listed language.
+
+languagesystem DFLT dflt;
+languagesystem latn AZE;
+languagesystem latn CRT;
+languagesystem latn KAZ;
+languagesystem latn TAT;
+languagesystem latn TRK;
+
+feature locl {
+    script latn;
+    language AZE CRT KAZ TAT TRK;
+    substitute i by idotaccent;
+} locl;

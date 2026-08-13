@@ -1,0 +1,21 @@
+# Classes in a multiple substitution are paired by index. Single glyphs are
+# repeated for every member of the target class.
+
+@Ligatures = [f_i f_l T_h];
+@First = [f f T];
+@Second = [i l h];
+
+@Left = [parenleft bracketleft braceleft];
+@Symbol = [plus minus equal];
+@Right = [parenright bracketright braceright];
+@SymbolLeft = [plus.left minus.left equal.left];
+@SymbolRight = [plus.right minus.right equal.right];
+
+feature ccmp {
+    substitute @Ligatures by @First @Second;
+    substitute [f_i f_l] by f [i l];
+
+    # Class-based multiple substitution is also available in-line in a
+    # contextual rule with one marked input class.
+    substitute @Left @Symbol' @Right by @SymbolLeft @SymbolRight;
+} ccmp;

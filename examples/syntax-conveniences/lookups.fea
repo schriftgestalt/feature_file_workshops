@@ -1,0 +1,19 @@
+# A standalone lookup inside a feature is defined without being applied by the
+# feature directly. The closing lookup label is optional.
+
+@Uppercase = [Alpha Beta Gamma];
+@TopAccents = [gravecomb acutecomb];
+
+feature ccmp {
+    standalone lookup CASE_ACCENTS {
+        substitute gravecomb by gravecomb.case;
+        substitute acutecomb by acutecomb.case;
+    };
+
+    substitute @Uppercase @TopAccents' lookup CASE_ACCENTS;
+} ccmp;
+
+# The traditional repeated closing label remains valid.
+lookup SHARED {
+    substitute a by a.alt;
+} SHARED;

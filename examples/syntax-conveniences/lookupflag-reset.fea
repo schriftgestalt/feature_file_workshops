@@ -1,0 +1,9 @@
+# An empty lookupflag statement resets all flags, like `lookupflag 0;`.
+
+feature mark {
+    lookupflag IgnoreMarks;
+    position acutecomb <10 0 0 0>;
+
+    lookupflag;
+    position gravecomb <20 0 0 0>;
+} mark;

@@ -83,9 +83,9 @@ anonBlock:
 ;
 
 lookupBlockTopLevel:
-    LOOKUP startlabel=label USE_EXTENSION? LCBRACE
+    STANDALONE? LOOKUP startlabel=label USE_EXTENSION? LCBRACE
     statement+
-    RCBRACE endlabel=label SEMI
+    RCBRACE (endlabel=label)? SEMI
 ;
 
 featureStatement:
@@ -95,9 +95,16 @@ featureStatement:
 ;
 
 lookupBlockOrUse:
-    LOOKUP startlabel=label ( USE_EXTENSION? LCBRACE
+      LOOKUP startlabel=label ( USE_EXTENSION? LCBRACE
     statement+
-    RCBRACE endlabel=label )? SEMI
+    RCBRACE (endlabel=label)? )? SEMI
+    | standaloneLookupBlock
+;
+
+standaloneLookupBlock:
+    STANDALONE LOOKUP startlabel=label USE_EXTENSION? LCBRACE
+    statement+
+    RCBRACE (endlabel=label)? SEMI
 ;
 
 cvParameterBlock:
@@ -127,6 +134,7 @@ statement:
     | glyphClassAssign
     | ignoreSubOrPos
     | substitute
+    | deleteStatement
     | mark_statement
     | position
     | parameters
@@ -146,11 +154,11 @@ scriptAssign:
 ;
 
 langAssign:
-    LANGUAGE tag ( EXCLUDE_DFLT | INCLUDE_DFLT | EXCLUDE_dflt | INCLUDE_dflt )?
+    LANGUAGE tag+ ( EXCLUDE_DFLT | INCLUDE_DFLT | EXCLUDE_dflt | INCLUDE_dflt )?
 ;
 
 lookupflagAssign:
-    LOOKUPFLAG ( NUM | lookupflagElement+ )
+    LOOKUPFLAG ( NUM | lookupflagElement+ )?
 ;
 
 lookupflagElement:
@@ -170,6 +178,10 @@ substitute:
     ( EXCEPT lookupPattern ( COMMA lookupPattern )* )?
     (   revtok startpat=lookupPattern ( BY ( KNULL | endpat=lookupPattern ) )?
       | subtok startpat=lookupPattern ( ( BY | FROM ) ( KNULL | endpat=lookupPattern ) )? )
+;
+
+deleteStatement:
+    deletetok lookupPattern
 ;
 
 position:
@@ -563,6 +575,10 @@ label:
 
 tag:
     NAMELABEL | EXTNAME | STRVAL | MARK     // MARK included for "feature mark"
+;
+
+deletetok:
+    DELETE | DELETE_v
 ;
 
 fixedNum:
