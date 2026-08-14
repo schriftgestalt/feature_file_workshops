@@ -1,0 +1,19 @@
+# Default and conditional GSUB behavior for a variable font.
+
+feature rlig {
+    # This is the default feature when no condition matches.
+    sub a.variable by a;
+
+    # A bounded, half-open range in design units: [600d, 900d).
+    condition 600d < wght < 900d;
+    sub a by a.variable;
+
+    # Both this one-sided range and the second-axis range must be satisfied.
+    condition 700d < wght, wdth < 80u;
+    sub b by b.condensed;
+
+    # This overlaps both regions above. The omitted unit is the
+    # backward-compatible spelling for design units.
+    condition 750 < wght < 850;
+    sub c by c.highContrast;
+} rlig;

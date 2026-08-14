@@ -45,6 +45,7 @@ Last updated 7 October 2024
 - [3. Including files](#3)
 - [4. Specifying features](#4)
   - [a. feature](#4.a)
+    - [1. Conditional feature variations](#4.a.1)
   - [b. Language system](#4.b)
     - [i.  languagesystem](#4.b.i)
     - [ii. script and language](#4.b.ii)
@@ -176,6 +177,7 @@ contexts.
 [`anon`](#10)<br>
 [`anonymous`](#10)<br>
 [`by`](#5.a)<br>
+[`condition`](#4.a.1)<br>
 [`contourpoint`](#2.e.vi)<br>
 [`cursive`](#6.c)<br>
 [`device`](#2.e.iii)  _[ Not implemented ]_<br>
@@ -300,7 +302,8 @@ dflt  # can be used only with the language keyword and as the language value wit
     " "  double quotes    Enclose a name table string
     { }  braces           Enclose a feature, lookup, table, or anonymous block
     [ ]  square brackets  Enclose components of a glyph class
-    < >  angle brackets   Enclose a device, value record, contour point, anchor, or caret
+    < >  angle brackets   Enclose a device, value record, contour point, anchor, or caret;
+                          < also separates the parts of an axis condition
     ( )  parentheses      Enclose the file name to be included or enclose a variable value
 
 
@@ -1070,6 +1073,102 @@ glyph positioning. A feature block may contain glyph substitution rules
 [§[5](#5)], glyph positioning rules [§[6](#6)], or both.
 
 A lookup is a group of rules of the same type. See §[4.e](#4.e).
+
+<a name="4.a.1"></a>
+#### 4.a.1. Conditional feature variations
+
+In a variable font, a feature can use different substitution or positioning
+lookups in different regions of the designspace. Such conditional behavior is
+encoded in the `FeatureVariations` table of the GSUB or GPOS table.
+
+A `condition` statement begins a conditional sequence of feature statements:
+
+```fea
+feature rlig {
+    sub a.variable by a;
+
+    condition 600d < wght < 900d;
+    sub a by a.variable;
+} rlig;
+```
+
+A `condition` statement is valid only directly inside a feature block. It is
+not valid at the top level or within a lookup block. Its syntax is:
+
+```fea
+condition <axis condition> [, <axis condition> ...];
+```
+
+An axis condition gives a lower bound, an upper bound, or both:
+
+```fea
+condition 600d < wght < 900d;  # lower and upper bounds
+condition 600d < wght;         # lower bound only
+condition wght < 900d;         # upper bound only
+```
+
+An axis value is a signed integer or decimal followed by one of the `u`, `d`,
+or `n` unit letters described in §[2.e.iia](#2.e.iia). For compatibility with
+earlier implementations, the unit letter may be omitted and the value is then
+interpreted in design units (`d`). A missing lower or upper bound means the
+minimum or maximum value of the axis, respectively.
+
+Despite the use of the less-than character as a separator, a stated lower bound
+is inclusive and a stated upper bound is exclusive. Thus,
+`600d < wght < 900d` matches axis values greater than or equal to 600d and less
+than 900d. A missing lower or upper bound includes the minimum or maximum value
+of the axis, respectively.
+
+OpenType Condition tables encode inclusive minimum and maximum values. After
+conversion to normalized coordinates and F2Dot14, a compiler must represent an
+explicit exclusive upper bound by subtracting one minimum F2Dot14 increment
+from the converted upper value. This is the same next-lower adjustment denoted
+by the trailing hyphen for a variable location specifier; see
+§[2.e.iia](#2.e.iia). The adjustment applies only to an explicit upper bound.
+After adjustment, both stored bounds must be within the axis range and the
+lower bound must not exceed the upper bound.
+
+This makes adjacent conditions non-overlapping without requiring adjusted
+values in the source:
+
+```fea
+condition wght < 400d;
+condition 400d < wght < 700d;
+condition 700d < wght;
+```
+
+A condition can contain at most one range for any given axis. A condition with
+ranges for multiple axes is satisfied only when the current designspace
+location lies within every specified axis range:
+
+```fea
+condition 600d < wght < 900d, 70u < wdth < 90u;
+sub won by won.boldcondensed;
+```
+
+The sequence governed by a condition begins immediately after the `condition`
+statement and ends at the next `condition` statement or the end of the feature
+block. Statements before the first `condition` form the default feature. Each
+conditional sequence forms an alternate feature and does not automatically
+inherit lookups from the default feature or from another conditional sequence.
+For example, in the first example above, the default feature contains only
+`sub a.variable by a`, while the alternate feature contains only
+`sub a by a.variable`.
+
+A `condition` statement also ends any implicit lookup in progress. Lookup flags
+and other lookup-specific state do not carry across a condition statement.
+
+More than one conditional sequence may match the same designspace location.
+At such a location, the applicable sequences are combined in source order to
+form the alternate feature. Because an OpenType layout engine uses only the
+first matching FeatureVariation record, a compiler must order records and,
+when necessary, create records for intersections so that all applicable source
+sequences are represented. Conditional sequences with identical condition
+sets are likewise combined in source order.
+
+The `condition` syntax can be used in features containing GSUB rules, GPOS
+rules, or both. A feature that contributes to both tables produces the
+corresponding conditional feature substitutions independently in each table.
 
 <a name="4.b"></a>
 ### 4.b. Language system

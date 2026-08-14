@@ -41,12 +41,39 @@ specification linked above. This document provides a basic introduction to the
 features, along with advice about how to choose between expressions when
 alternatives are available.
 
-**Note:** As of this draft the additional support for variable values (kerning,
-anchors, etc) is tentatively complete and ready for general community review.
-Other planned additions to support "Feature Variations" (such as substitutions
-that are limited to certain axis ranges) have not yet been specified or
-implemented. This document will be updated as the specification,
-implementation, reviewing, and finalizing continues.)
+The syntax supports both variable values (such as kerning and anchors) and
+Feature Variations, in which complete substitution or positioning lookups are
+selected for particular designspace regions.
+
+## Conditional feature code
+
+The `condition` statement associates feature code with a region of a variable
+font's designspace:
+
+```fea
+condition 600d < wght < 900d;
+sub dollar by dollar.bold;
+```
+
+The code after a `condition` statement is used for the stated designspace
+region, up to the next `condition` statement or the end of the feature block.
+The lower bound is inclusive and the upper bound is exclusive, making adjacent
+ranges such as `wght < 400d` and `400d < wght` non-overlapping. A missing bound
+includes the minimum or maximum of the axis. A condition with comma-separated
+ranges on multiple axes is satisfied only when the current designspace
+location lies within every range:
+
+```fea
+condition 600d < wght, wdth < 80u;
+sub won by won.boldcondensed;
+```
+
+Feature Variations replace a complete feature table rather than appending
+lookups to it. Rules before the first `condition` form the default feature;
+rules governed by a condition form an alternate feature and do not
+automatically inherit the default rules. See
+§[4.a.1](OpenTypeFeatureFileSpecification.md#4.a.1) for the complete syntax
+and the handling of overlapping conditions.
 
 ## The basics of a single variable value
 

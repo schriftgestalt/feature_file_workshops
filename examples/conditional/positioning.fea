@@ -1,0 +1,9 @@
+# Feature Variations can select GPOS as well as GSUB lookups.
+
+feature kern {
+    pos A V -80;
+
+    # An omitted lower bound includes the minimum; the upper bound excludes 350u.
+    condition wght < 350u;
+    pos A V -40;
+} kern;

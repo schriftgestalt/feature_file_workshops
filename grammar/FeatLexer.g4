@@ -68,6 +68,7 @@ ANCHOR                  : 'anchor' ;
 ANCHOR_DEF              : 'anchorDef' ;
 VALUE_RECORD_DEF        : 'valueRecordDef' ;
 LOCATION_DEF            : 'locationDef' -> pushMode(LocationDefMode) ;
+CONDITION               : 'condition' -> pushMode(ConditionMode) ;
 MARK                    : 'mark';
 MARK_CLASS              : 'markClass' ;
 CURSIVE                 : 'cursive' ;
@@ -257,3 +258,23 @@ VV_NUM                  : '-'? ( '1' .. '9' ( '0' .. '9' )* | '0' ) -> type(NUM)
 VV_WHITESPACE           : [ \t\r\n]+ -> skip ;
 
 // NOTE: NO EXTNAME in this mode - prevents d:47 ambiguity
+
+// ============================================================================
+// CONDITION MODE (for: condition 600d < wght < 900d, wdth < 80u;)
+// ============================================================================
+mode ConditionMode;
+
+// Axis unit tokens are contextual so that u, d, and n remain valid glyph names.
+C_AXISUNIT              : ('u' | 'd' | 'n') -> type(AXISUNIT) ;
+
+// Punctuation used in condition statements.
+C_BEGINVALUE            : '<' -> type(BEGINVALUE) ;
+C_COMMA                 : ',' -> type(COMMA) ;
+C_SEMI                  : ';' -> type(SEMI), popMode ;
+
+// Axis tags and coordinate values.
+C_NAMELABEL             : GNST LCHR* -> type(NAMELABEL) ;
+C_POINTNUM              : '-'? ( '0' .. '9' )+ '.' ( '0' .. '9' )+ -> type(POINTNUM) ;
+C_NUM                   : '-'? ( '1' .. '9' ( '0' .. '9' )* | '0' ) -> type(NUM) ;
+
+C_WHITESPACE            : [ \t\r\n]+ -> skip ;

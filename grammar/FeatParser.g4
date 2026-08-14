@@ -92,6 +92,20 @@ featureStatement:
       statement
     | lookupBlockOrUse
     | cvParameterBlock
+    | conditionStatement
+;
+
+conditionStatement:
+    CONDITION axisCondition ( COMMA axisCondition )* SEMI
+;
+
+axisCondition:
+      conditionValue BEGINVALUE tag ( BEGINVALUE conditionValue )?
+    | tag BEGINVALUE conditionValue
+;
+
+conditionValue:
+    fixedNum AXISUNIT?
 ;
 
 lookupBlockOrUse:
