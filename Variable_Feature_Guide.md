@@ -242,6 +242,50 @@ As with variable metrics, the first syntax is easier when:
 
 And the second syntax is easier when both positions use the same locations.
 
+## Variable GPOS with parenthesized locations
+
+There is an additional syntax for variable value records and anchors. It places
+each location in parentheses immediately before all values at that location,
+without the colon used by the variable formats described above. In the
+one-metric value record form:
+
+```fea
+pos @Uppercase 10;               # static
+pos @Uppercase 10 (wdth=80d) 20; # variable
+```
+
+In the second rule, `10` is the x advance at the default location and `20` is
+the x advance at `wdth=80d`. The values interpolate over the specified
+designspace.
+
+The four-metric value record form uses the same ordering. Each group contains
+x placement, y placement, x advance, and y advance, in that order:
+
+```fea
+pos @Digit colon' <10 50 20 0
+    (wdth=80d) 30 40 60 0
+    (wdth=40d, opsz=28d) 5 10 10 0> @Digit;
+```
+
+An anchor similarly groups its x and y coordinates by location:
+
+```fea
+pos base A <anchor 300 700
+    (wght=200d) 290 680
+    (wght=900d) 320 720> mark @top;
+```
+
+This syntax may be easier to read when all metrics or coordinates use the same
+locations. The value record formats described earlier in this guide may be
+clearer when only one metric varies or the metrics use different sets of
+locations.
+
+Early implementations, before this syntax was standardized, used a colon between
+each axis tag and position and omitted the axis unit letter, for example
+`(wght:900)`. Compilers may accept that spelling for compatibility, interpreting
+a position without a unit as design units. New files should use the regular
+location syntax and an explicit unit, for example `(wght=900d)`.
+
 # Style and readability
 
 The size (measured in characters) of a variable value specifier in a feature

@@ -294,14 +294,16 @@ dflt  # can be used only with the language keyword and as the language value wit
     \    backslash        Identifies CIDs. Distinguishes glyph names from an identical keyword
     -    hyphen           Denotes glyph ranges in a glyph class or the smallest decrease of an axis location
     +    plus sign        Denotes the smallest increase of an axis location
-    :    colon            Separates a location specifier from the value at that location
+    :    colon            Separates a location specifier from the value at that location;
+                          separates an axis tag from its value in a legacy variation position
     =    equal sign       Glyph class assignment operator
     '    single quote     Marks a glyph or glyph class for contextual substitution or positioning
     " "  double quotes    Enclose a name table string
     { }  braces           Enclose a feature, lookup, table, or anonymous block
     [ ]  square brackets  Enclose components of a glyph class
     < >  angle brackets   Enclose a device, value record, contour point, anchor, or caret
-    ( )  parentheses      Enclose the file name to be included or enclose a variable value
+    ( )  parentheses      Enclose the file name to be included, a variable value, or a
+                          designspace location in value record format H or anchor format F
 
 
 <a name="2.e"></a>
@@ -550,6 +552,82 @@ For example:
 
 The name must have been defined with a `valueRecordDef` statement before being used.
 
+##### Value record format H, the parenthesized-location variable value record:
+
+This format encloses each non-default designspace location in parentheses and
+places it immediately before the value at that location. Unlike value record
+formats B and D, no colon separates the location from the following value. For
+the common one-metric form, the syntax is:
+
+```fea
+<metric> (<location>) <metric> [(<location>) <metric> ...]
+```
+
+For example:
+
+```fea
+pos @Uppercase 10;               # static
+pos @Uppercase 10 (wdth=80d) 20; # variable
+```
+
+The first metric is the value at the default location. Each subsequent metric
+is paired with the parenthesized location immediately before it. An omitted
+axis in a location is at its default position. A location must not resolve to
+the default location, and the same full location must not occur more than once
+in a value record.
+
+The four-metric form encloses the complete record in angle brackets:
+
+```fea
+<<metric> <metric> <metric> <metric>
+ (<location>) <metric> <metric> <metric> <metric>
+ [(<location>) <metric> <metric> <metric> <metric> ...]>
+```
+
+The four metrics at each location are x placement, y placement, x advance,
+and y advance, in that order. For example:
+
+```fea
+<0 0 10 0
+ (wght=200d) 0 0 8 0
+ (wght=900d) 0 0 12 0>
+```
+
+This is equivalent to value record format D:
+
+```fea
+(<0 0 10 0> wght=200d:<0 0 8 0> wght=900d:<0 0 12 0>)
+```
+
+The parenthesized location normally uses the location syntax from
+§[2.e.iia](#2.e.iia), including its axis unit letters, or a named location from
+§[2.e.iib](#2.e.iib):
+
+```fea
+10 (wght=900u) 12
+10 (wght=1000d, opsz=0n) 12
+10 (@ExtraBlack) 12
+```
+
+For compatibility with syntax implemented before being standardized by this
+specification, an axis position in this context may use a colon in place of the
+equal sign. Multiple axis positions in this legacy form may be separated by
+whitespace, with an optional comma. A missing unit letter is interpreted as
+design units (`d`):
+
+```fea
+10 (wght:900) 12
+10 (wght:1000d opsz:0n) 12
+```
+
+New and generated feature files should use the regular variable location
+syntax with an equal sign and explicit unit letters.
+
+A compiler must compile format H to the same VariationIndex tables and
+ItemVariationStore data as the equivalent format B or D value. The location
+unit conversion, interpolation, and validation rules for other variable values
+also apply to this format.
+
 <a name="2.e.v"></a>
 #### 2.e.v. Named value record
 
@@ -685,6 +763,31 @@ Second, the pair can be specified analogously to value record format D:
 
 Note the distinctive aspects of this format: There is only one set of parentheses,
 and each of the values in the pair are enclosed by angle brackets.
+
+##### Anchor format F, the parenthesized-location variable anchor:
+
+An anchor can instead enclose each non-default designspace location in
+parentheses and place it immediately before the coordinate pair at that
+location, without a separating colon:
+
+```fea
+<anchor <metric> <metric>
+        (<location>) <metric> <metric>
+        [(<location>) <metric> <metric> ...]>
+```
+
+For example:
+
+```fea
+<anchor 120 -20
+        (wght=200d) 115 -10
+        (wght=900d) 125 -30>
+```
+
+The first pair is the x and y coordinates at the default location. Each
+subsequent coordinate pair is associated with the parenthesized location
+immediately before it. Locations have the same requirements and compatibility
+syntax as in value record format H.
 
 <a name="2.e.viii"></a>
 #### 2.e.viii. Named anchor definition
@@ -2130,6 +2233,13 @@ Glyph positioning is specified in terms of metrics [§[2.e.ii](#2.e.ii)], device
 tables [§[2.e.iii](#2.e.iii)], value records [§[2.e.iv](#2.e.iv)], and anchors
 [§[2.e.vii](#2.e.vii)]. In all positioning rules, these are inserted immediately
 after the glyph(s) they apply to, with the exception of Pair Pos format B.
+
+Value record format H and anchor format F provide a parenthesized-location
+syntax in which each designspace location directly precedes the values at that
+location, without a separating colon. These formats may be easier to read when
+all metrics or coordinates use the same locations, while the existing variable
+formats may be clearer when only one component varies or different components
+use different sets of locations.
 
 <a name="6.a"></a>
 ### 6.a. [GPOS LookupType 1] Single adjustment positioning

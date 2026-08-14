@@ -193,10 +193,35 @@ valueRecord:
 ;
 
 valueLiteral:
-      singleValueLiteral
+      parenthesizedLocationValueLiteral
+    | singleValueLiteral
     | ( BEGINVALUE singleValueLiteral singleValueLiteral
                    singleValueLiteral singleValueLiteral ENDVALUE )
     | ( LPAREN locationMultiValueLiteral+ RPAREN )
+;
+
+parenthesizedLocationValueLiteral:
+      NUM variationPosition NUM ( variationPosition NUM )*
+    | BEGINVALUE NUM NUM NUM NUM
+        variationPosition NUM NUM NUM NUM
+        ( variationPosition NUM NUM NUM NUM )*
+      ENDVALUE
+;
+
+variationPosition:
+    LPAREN
+    ( locationSpecifier
+    | legacyVariationLocation
+    )
+    RPAREN
+;
+
+legacyVariationLocation:
+    legacyAxisLocationLiteral ( COMMA? legacyAxisLocationLiteral )*
+;
+
+legacyAxisLocationLiteral:
+    tag COLON fixedNum AXISUNIT?
 ;
 
 singleValueLiteral:
@@ -503,7 +528,8 @@ anchorLiteral:
 ;
 
 anchorLiteralXY:
-      (xval=singleValueLiteral yval=singleValueLiteral)
+      (NUM NUM variationPosition NUM NUM (variationPosition NUM NUM)*)
+    | (xval=singleValueLiteral yval=singleValueLiteral)
     | (LPAREN anchorMultiValueLiteral+ RPAREN)
 ;
 

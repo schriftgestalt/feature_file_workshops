@@ -225,7 +225,8 @@ LD_WHITESPACE           : [ \t\r\n]+ -> skip ;
 // NOTE: NO EXTNAME in this mode - prevents d:47 ambiguity
 
 // ============================================================================
-// VARVALUE MODE (for: (50 wght=400d:47 @Regular:54))
+// VARVALUE MODE (for variable values and variation positions such as
+// (50 wght=400d:47 @Regular:54) and (wght=400d))
 // ============================================================================
 mode VarValue;
 
@@ -233,7 +234,7 @@ mode VarValue;
 VV_AXISUNIT             : ('u' | 'd' | 'n') -> type(AXISUNIT) ;
 
 // Punctuation needed in variable values
-VV_COLON                : ':' -> type(COLON) ;          // Key addition for values
+VV_COLON                : ':' -> type(COLON) ;          // Value separator or legacy axis separator
 VV_EQUALS               : '=' -> type(EQUALS) ;
 VV_COMMA                : ',' -> type(COMMA) ;
 VV_HYPHEN               : '-' -> type(HYPHEN) ;

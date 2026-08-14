@@ -1,0 +1,33 @@
+# Variable GPOS with parenthesized locations uses the first value as the default.
+
+locationDef wght=900d @Black;
+
+@Uppercase = [A B C];
+@Digit = [zero one two];
+markClass acute <anchor 100 200> @top;
+
+feature cpsp {
+    # A single metric is an x advance adjustment in this horizontal feature.
+    pos @Uppercase 10 (wdth=80d) 20 (wdth=40d, opsz=28d) 30;
+
+    # A named location can be used in place of a location literal.
+    pos A 10 (@Black) 15;
+} cpsp;
+
+feature kern {
+    # The four metrics are x placement, y placement, x advance, and y advance.
+    pos @Digit colon' <10 50 20 0
+        (wdth=80d) 30 40 60 0
+        (wdth=40d, opsz=28d) 5 10 10 0> @Digit;
+
+    # Legacy Glyphs/FEAKit axis:value syntax remains valid for compatibility.
+    # Axis positions may be whitespace-separated; a missing unit means design units.
+    pos A V -80 (wght:700 opsz:12) -100 (wght:900) -120;
+} kern;
+
+feature mark {
+    # Each location is followed by the anchor's x and y coordinates.
+    pos base A <anchor 300 700
+        (wght=200d) 290 680
+        (wght=900d) 320 720> mark @top;
+} mark;
