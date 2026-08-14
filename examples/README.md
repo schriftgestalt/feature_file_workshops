@@ -16,6 +16,7 @@ finding files that cover particular semantics.
 - **advanced/** - Advanced features (cvParameters, featureNames, size, anonymous blocks) (5 files)
 - **positioning/** - GPOS positioning examples (mark-to-mark, enumerate, cursive) (6 files)
 - **variable/** - Variable font syntax: locationDef, variable values, axis units (6 files)
+- **preprocessing/** - Conditional preprocessing directives
 - **edge-cases/** - Corner cases, unusual but valid syntax
 - **phase2/** - Work in progress features
 

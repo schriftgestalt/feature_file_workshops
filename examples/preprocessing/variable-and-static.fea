@@ -1,0 +1,11 @@
+# The VARIABLE name is defined for variable-font builds.
+
+feature salt {
+#ifdef VARIABLE
+    sub a by a.variable;
+#endif
+
+#ifndef VARIABLE
+    sub a by a.static;
+#endif
+} salt;

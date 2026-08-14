@@ -10,6 +10,11 @@ lexer grammar FeatLexer;
 // Declare token types used in modes
 tokens { AXISUNIT }
 
+IFDEF_DIRECTIVE         : '#' [ \t]* 'ifdef' [ \t]+ [A-Za-z_] [A-Za-z0-9_]* [ \t]* -> skip ;
+IFNDEF_DIRECTIVE        : '#' [ \t]* 'ifndef' [ \t]+ [A-Za-z_] [A-Za-z0-9_]* [ \t]* -> skip ;
+ENDIF_DIRECTIVE         : '#' [ \t]* 'endif' [ \t]* -> skip ;
+INVALID_PREPROCESSOR_DIRECTIVE
+                        : '#' [ \t]* ('ifdef' | 'ifndef' | 'endif') ~[\r\n]* ;
 COMMENT                 : '#' ~[\r\n]* -> skip ;
 WHITESPACE              : [ \t\r\n]+ -> skip ;
 

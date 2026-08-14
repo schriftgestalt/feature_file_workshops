@@ -20,6 +20,7 @@ Last updated 7 October 2024
 - [1. Introduction](#1)
 - [2. Syntax](#2)
   - [a. Comments](#2.a)
+  - [aa. Conditional preprocessing](#2.aa)
   - [b. White space](#2.b)
   - [c. Keywords](#2.c)
   - [d. Special characters](#2.d)
@@ -154,7 +155,47 @@ feature file grammar in the makeotf program, unless otherwise indicated.
 
 The `#` character indicates the start of a comment; the comment extends until
 the end of the line. Text on a line after the comment is discarded before
-processing.
+processing. The preprocessing directives described in §[2.aa](#2.aa) are the
+only exceptions.
+
+<a name="2.aa"></a>
+### 2.aa. Conditional preprocessing
+
+Feature file text can be conditionally included using the `#ifdef` (if
+defined), `#ifndef` (if not defined), and `#endif` preprocessing directives:
+
+```fea
+#ifdef VARIABLE
+sub a by a.variable;
+#endif
+
+#ifndef VARIABLE
+sub a by a.static;
+#endif
+```
+
+Each directive must occupy a line by itself, apart from white space. `#ifdef`
+and `#ifndef` are followed by exactly one preprocessor name; `#endif` is not
+followed by a name. A preprocessor name starts with an ASCII letter or
+underscore and continues with ASCII letters, digits, or underscores.
+
+The text between `#ifdef <name>` and the corresponding `#endif` is retained if
+`<name>` is defined by the implementation and discarded otherwise. The text
+between `#ifndef <name>` and the corresponding `#endif` is retained if
+`<name>` is not defined and discarded otherwise. An unknown name is not
+defined. Conditional blocks cannot be nested.
+
+There is no `#else` directive. Complementary branches can be written using an
+`#ifdef` block followed by an `#ifndef` block for the same name.
+
+An implementation must define the preprocessor name `VARIABLE` when compiling
+a variable font and must leave it undefined when compiling a non-variable
+font. Implementations may provide ways to define additional names.
+
+Conditional preprocessing occurs before the retained text is tokenized and
+parsed as feature file syntax. Directives may therefore appear wherever the
+retained text and the surrounding text together form a valid feature file.
+Every opening directive must have a corresponding `#endif`.
 
 <a name="2.b"></a>
 ### 2.b. White space
@@ -287,7 +328,7 @@ dflt  # can be used only with the language keyword and as the language value wit
 <a name="2.d"></a>
 ### 2.d. Special characters
 
-    #    pound sign       Denotes start of comment
+    #    pound sign       Denotes start of comment or preprocessing directive
     ;    semicolon        Terminates a statement
     ,    comma            Separator in various lists
     @    at sign          Identifies glyph class names and designspace locations

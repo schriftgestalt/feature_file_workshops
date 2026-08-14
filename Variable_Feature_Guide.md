@@ -48,6 +48,27 @@ that are limited to certain axis ranges) have not yet been specified or
 implemented. This document will be updated as the specification,
 implementation, reviewing, and finalizing continues.)
 
+## Conditional preprocessing
+
+The predefined `VARIABLE` preprocessor name allows one feature file to contain
+code for both variable and non-variable builds:
+
+```fea
+feature rlig {
+#ifdef VARIABLE
+    sub dollar by dollar.variable;
+#endif
+
+#ifndef VARIABLE
+    sub dollar by dollar.static;
+#endif
+} rlig;
+```
+
+`VARIABLE` is defined when compiling a variable font and undefined when
+compiling a non-variable font. Implementations may define additional names.
+See §[2.aa](OpenTypeFeatureFileSpecification.md#2.aa) for the complete syntax.
+
 ## The basics of a single variable value
 
 Generally speaking, a variable value consists of a set of designspace locations
