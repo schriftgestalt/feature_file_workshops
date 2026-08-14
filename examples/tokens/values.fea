@@ -1,0 +1,23 @@
+# Value tokens are resolved from font source data before feature parsing.
+
+@Uppercase = [A B C];
+markClass acute <anchor 100 200> @SpecialTopMark;
+
+feature cpsp {
+    # A named value can be inserted directly or used in arithmetic.
+    pos @Uppercase <$padding 0 ${padding * 2} 0>;
+
+    # Computed tokens can read glyph metrics.
+    pos a.alt <${period:LSB} 0 ${period:LSB * 2} 0>;
+
+    # Named values and glyph properties can be combined in one expression.
+    pos a <${padding + period:LSB} 0 0 0>;
+
+    # A token can also supply a value at a variable-font location.
+    pos A (0 wght=900d:$boldAdvance);
+
+    # Anchor coordinates are available through a dot-separated property path.
+    pos base b <anchor
+        ${b:anchors.top_special.x}
+        ${b:anchors.top_special.y}> mark @SpecialTopMark;
+} cpsp;

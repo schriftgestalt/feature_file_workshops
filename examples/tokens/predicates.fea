@@ -1,0 +1,11 @@
+# Predicate tokens expand to glyph names in source order.
+
+@Adlam = [$[script == "adlam"]];
+@Stars = [period comma $[name endswith ".star"]];
+@SmallCaps = [$[case == smallCaps]];
+
+# The class() function can refer to a previously defined feature class.
+@Narrow = [A B C a b c];
+@LowercaseNarrow = [
+    $[name in class(Narrow) AND case == lower]
+];

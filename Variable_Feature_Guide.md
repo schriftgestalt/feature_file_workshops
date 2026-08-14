@@ -188,6 +188,22 @@ This syntax is used in almost all places where a variable value can be
 specified other than a "metric" and an anchor, and can optionally be used in
 those contexts as well.
 
+### Tokens in variable values
+
+Named value and computed tokens can supply metrics at the default or specified
+locations of a variable value. If `$boldAdvance` resolves to `20`, the following
+two rules are equivalent:
+
+```fea
+pos A (0 wght=900d:$boldAdvance);
+pos A (0 wght=900d:20);
+```
+
+The source environment resolves the token before the variable value is parsed.
+Token expansion does not define additional variation behavior: location
+conversion, interpolation, and validation proceed as for an equivalent numeric
+value written directly in the feature file.
+
 ## Kerning metrics
 
 A valid kerning metric can consist of either one or four values.  When

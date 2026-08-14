@@ -150,7 +150,7 @@ langAssign:
 ;
 
 lookupflagAssign:
-    LOOKUPFLAG ( NUM | lookupflagElement+ )
+    LOOKUPFLAG ( numberValue | lookupflagElement+ )
 ;
 
 lookupflagElement:
@@ -200,7 +200,7 @@ valueLiteral:
 ;
 
 singleValueLiteral:
-      NUM | parenLocationValue
+      numberValue | parenLocationValue
 ;
 
 parenLocationValue:
@@ -208,11 +208,12 @@ parenLocationValue:
 ;
 
 locationValueLiteral:
-    (locationSpecifier COLON)? NUM
+    (locationSpecifier COLON)? numberValue
 ;
 
 locationMultiValueLiteral:
-    (locationSpecifier COLON)? BEGINVALUE NUM NUM NUM NUM ENDVALUE
+    (locationSpecifier COLON)? BEGINVALUE
+    numberValue numberValue numberValue numberValue ENDVALUE
 ;
 
 locationSpecifier:
@@ -305,7 +306,7 @@ gdefGlyphClass:
 ;
 
 gdefAttach:
-    ATTACH lookupPattern NUM+
+    ATTACH lookupPattern numberValue+
 ;
 
 gdefLigCaretPos:
@@ -313,7 +314,7 @@ gdefLigCaretPos:
 ;
 
 gdefLigCaretIndex:
-    LIG_CARET_BY_IDX lookupPattern NUM+
+    LIG_CARET_BY_IDX lookupPattern numberValue+
 ;
 
 table_head:
@@ -329,7 +330,7 @@ headStatement:
 ;
 
 head:
-    FONT_REVISION POINTNUM
+    FONT_REVISION pointNumberValue
 ;
 
 table_hhea:
@@ -345,7 +346,7 @@ hheaStatement:
 ;
 
 hhea:
-      ( ASCENDER | DESCENDER | LINE_GAP ) NUM
+      ( ASCENDER | DESCENDER | LINE_GAP ) numberValue
     | ( CARET_OFFSET | CARET_SLOPE_RISE | CARET_SLOPE_RUN ) singleValueLiteral
 ;
 
@@ -404,11 +405,12 @@ os_2:
       | STRIKEOUT_SIZE | STRIKEOUT_POSITION ) num=singleValueLiteral
     |
       ( FS_TYPE | FS_TYPE_v | WEIGHT_CLASS | WIDTH_CLASS
-      | OS2_LOWER_OP_SIZE | OS2_UPPER_OP_SIZE ) unum=NUM
+      | OS2_LOWER_OP_SIZE | OS2_UPPER_OP_SIZE ) unum=numberValue
     | FAMILY_CLASS gnum=genNum
     | VENDOR STRVAL
-    | PANOSE NUM NUM NUM NUM NUM NUM NUM NUM NUM NUM
-    | ( UNICODE_RANGE | CODE_PAGE_RANGE ) NUM+
+    | PANOSE numberValue numberValue numberValue numberValue numberValue
+             numberValue numberValue numberValue numberValue numberValue
+    | ( UNICODE_RANGE | CODE_PAGE_RANGE ) numberValue+
 ;
 
 table_STAT:
@@ -427,7 +429,7 @@ statStatement:
 ;
 
 designAxis:
-    DESIGN_AXIS tag NUM LCBRACE
+    DESIGN_AXIS tag numberValue LCBRACE
     nameEntryStatement+
     RCBRACE
 ;
@@ -499,7 +501,7 @@ anchor:
 ;
 
 anchorLiteral:
-    anchorLiteralXY ( CONTOURPOINT cp=NUM )?
+    anchorLiteralXY ( CONTOURPOINT cp=numberValue )?
 ;
 
 anchorLiteralXY:
@@ -508,7 +510,7 @@ anchorLiteralXY:
 ;
 
 anchorMultiValueLiteral:
-    (locationSpecifier COLON)? BEGINVALUE NUM NUM ENDVALUE
+    (locationSpecifier COLON)? BEGINVALUE numberValue numberValue ENDVALUE
 ;
 
 lookupPattern:
@@ -542,6 +544,7 @@ gcLiteral:
 gcLiteralElement:
       startg=glyph ( HYPHEN endg=glyph )?
     | gclass
+    | GLYPH_PREDICATE_TOKEN
 ;
 
 gclass:
@@ -566,11 +569,19 @@ tag:
 ;
 
 fixedNum:
-    POINTNUM | NUM
+    POINTNUM | numberValue
 ;
 
 genNum:
-    NUM | NUMOCT | NUMEXT
+    numberValue | NUMOCT | NUMEXT
+;
+
+numberValue:
+    NUM | VALUE_TOKEN | COMPUTED_TOKEN
+;
+
+pointNumberValue:
+    POINTNUM | VALUE_TOKEN | COMPUTED_TOKEN
 ;
 
 // These are for an include directive in a block with statements

@@ -13,6 +13,12 @@ tokens { AXISUNIT }
 COMMENT                 : '#' ~[\r\n]* -> skip ;
 WHITESPACE              : [ \t\r\n]+ -> skip ;
 
+// Source-environment expansions. Their contents remain opaque to the feature
+// grammar and are resolved before ordinary parsing by a compiling frontend.
+VALUE_TOKEN             : '$' [A-Za-z_] [A-Za-z0-9_.-]* ;
+COMPUTED_TOKEN          : '${' ~[}]* '}' ;
+GLYPH_PREDICATE_TOKEN   : '$[' ~[\]]* ']' ;
+
 INCLUDE                 : 'include' -> pushMode(Include) ;
 FEATURE                 : 'feature' ;
 TABLE                   : 'table' ;
@@ -201,6 +207,10 @@ I_LPAREN                : ')' -> popMode ;
 // ============================================================================
 mode LocationDefMode;
 
+// Value tokens can supply coordinates inside location definitions.
+LD_VALUE_TOKEN          : '$' [A-Za-z_] [A-Za-z0-9_.-]* -> type(VALUE_TOKEN) ;
+LD_COMPUTED_TOKEN       : '${' ~[}]* '}' -> type(COMPUTED_TOKEN) ;
+
 // Axis unit tokens - ONLY defined in this mode
 LD_AXISUNIT             : ('u' | 'd' | 'n') -> type(AXISUNIT) ;
 
@@ -228,6 +238,10 @@ LD_WHITESPACE           : [ \t\r\n]+ -> skip ;
 // VARVALUE MODE (for: (50 wght=400d:47 @Regular:54))
 // ============================================================================
 mode VarValue;
+
+// Value tokens can supply values inside parenthesized variable records.
+VV_VALUE_TOKEN          : '$' [A-Za-z_] [A-Za-z0-9_.-]* -> type(VALUE_TOKEN) ;
+VV_COMPUTED_TOKEN       : '${' ~[}]* '}' -> type(COMPUTED_TOKEN) ;
 
 // Axis unit tokens - ONLY defined in this mode
 VV_AXISUNIT             : ('u' | 'd' | 'n') -> type(AXISUNIT) ;

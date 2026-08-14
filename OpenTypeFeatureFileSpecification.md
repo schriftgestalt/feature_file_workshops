@@ -23,6 +23,10 @@ Last updated 7 October 2024
   - [b. White space](#2.b)
   - [c. Keywords](#2.c)
   - [d. Special characters](#2.d)
+  - [da. Token expansion](#2.da)
+    - [i. Named value tokens](#2.da.i)
+    - [ii. Computed tokens](#2.da.ii)
+    - [iii. Glyph predicate tokens](#2.da.iii)
   - [e. Numbers, locations, and metrics](#2.e)
     - [i.    Number](#2.e.i)
     - [ii.   Metric](#2.e.ii)
@@ -291,6 +295,7 @@ dflt  # can be used only with the language keyword and as the language value wit
     ;    semicolon        Terminates a statement
     ,    comma            Separator in various lists
     @    at sign          Identifies glyph class names and designspace locations
+    $    dollar sign      Begins a value token, computed token, or glyph predicate token
     \    backslash        Identifies CIDs. Distinguishes glyph names from an identical keyword
     -    hyphen           Denotes glyph ranges in a glyph class or the smallest decrease of an axis location
     +    plus sign        Denotes the smallest increase of an axis location
@@ -299,10 +304,171 @@ dflt  # can be used only with the language keyword and as the language value wit
     '    single quote     Marks a glyph or glyph class for contextual substitution or positioning
     " "  double quotes    Enclose a name table string
     { }  braces           Enclose a feature, lookup, table, or anonymous block
-    [ ]  square brackets  Enclose components of a glyph class
+    [ ]  square brackets  Enclose components of a glyph class or a glyph predicate token
     < >  angle brackets   Enclose a device, value record, contour point, anchor, or caret
     ( )  parentheses      Enclose the file name to be included or enclose a variable value
 
+
+<a name="2.da"></a>
+### 2.da. Token expansion
+
+Tokens insert values or glyph names derived from the font source into feature
+code. They allow source data such as named values, glyph metrics, and glyph
+properties to be used without first generating a separate feature file. A
+token begins with a dollar sign (`$`) and has one of three forms:
+
+```fea
+$padding
+${padding * 2}
+$[category == "Symbol"]
+```
+
+Token expansion is performed during lexical analysis. The compiler passes the
+token contents to its source environment, which returns feature file text. The
+returned text is then tokenized and parsed in place of the original token.
+Token expansion can therefore depend on data that is not represented in a
+standalone feature file, such as the current font master or the glyph metadata
+maintained by a font editor.
+
+A compiler that is not integrated with a source environment may expose an API
+or command-line mechanism for supplying token values. If it cannot resolve a
+token, it must report an error. An invalid query, an empty expansion, and a
+cycle or excessive nesting in recursively expanded tokens must also be
+reported as errors.
+
+The three token forms are described below. The query between `${` and `}` or
+between `$[` and `]` is passed to the source environment as a single unit. The
+closing delimiter cannot occur in the query, and these delimiters do not nest.
+
+<a name="2.da.i"></a>
+#### 2.da.i. Named value tokens
+
+A named value token is a dollar sign followed immediately by a name:
+
+```fea
+$padding
+```
+
+The name starts with an ASCII letter or underscore and continues with ASCII
+letters, digits, periods, or hyphens. The source environment resolves the name
+to a number for the current compilation target. For a source with multiple
+masters, the source environment is responsible for selecting or interpolating
+the appropriate value.
+
+For example, if `padding` resolves to `10`, the following positioning rule
+adjusts the x placement by 10 design units:
+
+```fea
+pos @Uppercase <$padding 0 0 0>;
+```
+
+<a name="2.da.ii"></a>
+#### 2.da.ii. Computed tokens
+
+A computed token encloses a query in curly braces:
+
+```fea
+${padding * 2}
+${period:LSB}
+```
+
+Source environments should support arithmetic expressions made from numeric
+literals, named values, parentheses, and the `+`, `-`, `*`, and `/` operators,
+using the conventional precedence of those operators. Division by zero is an
+error.
+
+A source environment with glyph outline data should also support a glyph
+property operand written as a glyph name, a colon, and a dot-separated property
+path. The standard metric properties are `width`, `LSB`, `RSB`, `TSB`, and
+`BSB`. An anchor coordinate is addressed as `anchors.<anchor-name>.x` or
+`anchors.<anchor-name>.y`. Outline bounds are available as `bounds.minX`,
+`bounds.minY`, `bounds.maxX`, `bounds.maxY`, `bounds.width`, `bounds.height`,
+`bounds.midX`, and `bounds.midY`. Implementations may expose additional
+properties.
+
+```fea
+pos a.alt <${period:LSB} 0 ${period:LSB * 2} 0>;
+pos base b <anchor
+    ${b:anchors.top_special.x}
+    ${b:anchors.top_special.y}> mark @SpecialTopMark;
+```
+
+The result must be serialized as a feature file number valid at the token’s
+location. A computed token can combine named values and glyph properties in one
+expression. For example, if the named value `padding` is `20` and the “period”
+glyph’s left sidebearing is `35`, the computed token expands to `55`, making the
+following two rules equivalent:
+
+```fea
+pos a <${padding + period:LSB} 0 0 0>;
+pos a <55 0 0 0>;
+```
+
+<a name="2.da.iii"></a>
+#### 2.da.iii. Glyph predicate tokens
+
+A glyph predicate token encloses a predicate in square brackets and expands to
+a white-space-separated list of glyph names:
+
+```fea
+$[script == "adlam"]
+$[name endswith ".star"]
+```
+
+The source environment determines the glyph set against which the predicate is
+evaluated. For example, non-exporting glyphs may be omitted by default unless
+the predicate explicitly tests an implementation-defined property representing
+export status. If that property is named `export`, the following tokens would be
+equivalent in such an environment:
+
+```fea
+$[script == "latin"]
+$[script == "latin" AND export == true]
+```
+
+Explicitly testing the property may allow the default filter to be overridden,
+permitting queries such as:
+
+```fea
+$[export == false]
+```
+
+When used in a feature file glyph class, the token is enclosed in the class’s
+square brackets:
+
+```fea
+@Signs = [period comma $[category == "Symbol"]];
+@SmallCaps = [$[case == smallCaps]];
+```
+
+Predicate property paths and enumerated property values are supplied by the
+source environment. A predicate can compare Boolean values, numbers, strings,
+and objects reached through dot-separated property paths. Implementations
+should support `==`, `!=`, `<`, `<=`, `>`, and `>=` comparisons; the string
+operators `beginswith`, `endswith`, and `contains`; membership with `in`; and
+the Boolean operators `AND`, `OR`, and `NOT`. Boolean operators can be grouped
+with parentheses. Operator keywords are case-insensitive:
+
+```fea
+# Property paths and enumerated values are defined by the source environment.
+@WorkInProgress = [$["todo" in tags OR NOT note contains "done"]];
+@LowercaseIPAOrLang = [
+    $["ipa" in tags or ("lang" in tags and case == lower)]
+];
+```
+
+The special `class(<name>)` function represents the glyph names in a previously
+defined feature file glyph class. It can be used with `in` to form unions,
+intersections, and differences:
+
+```fea
+@LowercaseNarrow = [
+    $[name in class(Narrow) AND case == lower]
+];
+```
+
+An undefined class, property, or enumerated value is an error. A predicate that
+matches no glyphs produces an empty expansion and is therefore also an error.
 
 <a name="2.e"></a>
 ## 2.e. Numbers, locations, and metrics
